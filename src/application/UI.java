@@ -50,15 +50,23 @@ public class UI {
 			throw new InputMismatchException("Error reading ChessPosition. Valid values are from a1 to h8");
 		}
 	}
-	public static void printMatch(ChessMatch chessmatch,List<ChessPiece> captured) {
-		printBoard(chessmatch.getPieces());
+
+	public static void printMatch(ChessMatch chessMatch, List<ChessPiece> captured) {
+		printBoard(chessMatch.getPieces());
 		System.out.println();
 		printCapturedPieces(captured);
 		System.out.println();
-		System.out.println("Turn: " + chessmatch.getTurn());
-		System.out.println("Waiting plawer: " + chessmatch.getCurrentPlayer());
-		if(chessmatch.getCheck()) {
-			System.out.println("CHECK!");
+		System.out.println("Turn: " + chessMatch.getTurn());
+		if (!chessMatch.getCheckMate()) {
+
+			System.out.println("Waiting plawer: " + chessMatch.getCurrentPlayer());
+			if (chessMatch.getCheck()) {
+				System.out.println("CHECK!");
+			}
+		}
+		else {
+			System.out.println("CHECKMATE");
+			System.out.println("Winner: " + chessMatch.getCurrentPlayer());
 		}
 	}
 
@@ -86,8 +94,8 @@ public class UI {
 
 	private static void printPiece(ChessPiece piece, boolean background) {
 		if (background) {
-			System.out.print(ANSI_BLUE_BACKGROUND );
-			}
+			System.out.print(ANSI_BLUE_BACKGROUND);
+		}
 		if (piece == null) {
 			System.out.print("-" + ANSI_RESET);
 		} else {
@@ -96,14 +104,16 @@ public class UI {
 			} else {
 				System.out.print(ANSI_YELLOW + piece + ANSI_RESET);
 			}
-		
+
 		}
 		System.out.print(" ");
 	}
-	
+
 	private static void printCapturedPieces(List<ChessPiece> captured) {
-		List<ChessPiece> white = captured.stream().filter(x -> x.getColor() == Color.WHITE).collect(Collectors.toList());
-		List<ChessPiece> black = captured.stream().filter(x -> x.getColor() == Color.BLACK).collect(Collectors.toList());
+		List<ChessPiece> white = captured.stream().filter(x -> x.getColor() == Color.WHITE)
+				.collect(Collectors.toList());
+		List<ChessPiece> black = captured.stream().filter(x -> x.getColor() == Color.BLACK)
+				.collect(Collectors.toList());
 		System.out.println("Captured pieces:");
 		System.out.print("White: ");
 		System.out.print(ANSI_WHITE);
